@@ -142,8 +142,10 @@ CREATE POLICY "inscripciones_insert_own"
 
 GRANT SELECT ON TABLE ligas TO anon, authenticated;
 GRANT INSERT, UPDATE, DELETE ON TABLE ligas TO authenticated;
+GRANT SELECT ON TABLE usuarios TO anon, authenticated;
 GRANT SELECT, INSERT, UPDATE ON TABLE usuarios TO authenticated;
 GRANT SELECT, INSERT ON TABLE inscripciones TO authenticated;
+GRANT USAGE ON SCHEMA public TO anon, authenticated;
 GRANT USAGE, SELECT ON SEQUENCE ligas_id_seq TO anon, authenticated;
 GRANT USAGE, SELECT ON SEQUENCE inscripciones_id_seq TO authenticated;
 

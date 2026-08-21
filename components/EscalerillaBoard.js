@@ -88,9 +88,11 @@ export default function EscalerillaBoard() {
         if (!cancelled) {
           const text = err?.message || "No se pudo cargar la escalerilla.";
           setError(
-            text.includes("Could not find the table")
-              ? "Faltan las tablas parejas/desafios. Ejecuta supabase/escalerilla.sql en Supabase."
-              : text,
+            text.includes("permission denied") || text.includes("42501")
+              ? "Faltan permisos de lectura pública. Ejecuta supabase/grants-public.sql en Supabase."
+              : text.includes("Could not find the table")
+                ? "Faltan las tablas parejas/desafios. Ejecuta supabase/escalerilla.sql en Supabase."
+                : text,
           );
         }
       } finally {

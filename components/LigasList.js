@@ -183,11 +183,14 @@ export default function LigasList() {
       } catch (err) {
         if (!cancelled) {
           setError(
-            err?.message?.includes("Could not find the table")
-              ? "La tabla ligas todavía no existe. Ejecuta supabase/schema.sql en Supabase."
-              : err?.message?.includes("estado") || err?.message?.includes("column")
-                ? "Falta la columna estado. Ejecuta supabase/ligas-estado.sql en Supabase."
-                : err?.message || "No se pudieron cargar las ligas.",
+            err?.message?.includes("permission denied") ||
+              err?.message?.includes("42501")
+              ? "Faltan permisos de lectura pública. Ejecuta supabase/grants-public.sql en Supabase."
+              : err?.message?.includes("Could not find the table")
+                ? "La tabla ligas todavía no existe. Ejecuta supabase/schema.sql en Supabase."
+                : err?.message?.includes("estado") || err?.message?.includes("column")
+                  ? "Falta la columna estado. Ejecuta supabase/ligas-estado.sql en Supabase."
+                  : err?.message || "No se pudieron cargar las ligas.",
           );
         }
       } finally {

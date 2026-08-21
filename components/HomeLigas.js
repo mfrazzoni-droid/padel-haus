@@ -256,12 +256,14 @@ export default function HomeLigas() {
         if (!cancelled) {
           const text = err?.message || "No se pudieron cargar las ligas.";
           setError(
-            text.includes("ligas_ordenadas") ||
-              text.includes("Could not find the table")
-              ? "Falta la vista ligas_ordenadas. Ejecuta supabase/ligas-ordenadas.sql en Supabase."
-              : text.includes("estado") || text.includes("column")
-                ? "Falta la columna estado. Ejecuta supabase/ligas-estado.sql en Supabase."
-                : text,
+            text.includes("permission denied") || text.includes("42501")
+              ? "Faltan permisos de lectura pública. Ejecuta supabase/grants-public.sql en Supabase."
+              : text.includes("ligas_ordenadas") ||
+                  text.includes("Could not find the table")
+                ? "Falta la vista ligas_ordenadas. Ejecuta supabase/ligas-ordenadas.sql en Supabase."
+                : text.includes("estado") || text.includes("column")
+                  ? "Falta la columna estado. Ejecuta supabase/ligas-estado.sql en Supabase."
+                  : text,
           );
         }
       } finally {
