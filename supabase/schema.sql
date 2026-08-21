@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   nombre VARCHAR(100),
   email VARCHAR(100) UNIQUE NOT NULL,
-  rol VARCHAR(20) DEFAULT 'jugadora', -- jugadora o admin
+  rol VARCHAR(20) DEFAULT 'user', -- user o admin
   created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -115,7 +115,10 @@ DROP POLICY IF EXISTS "usuarios_insert_own" ON usuarios;
 CREATE POLICY "usuarios_insert_own"
   ON usuarios FOR INSERT
   TO authenticated
-  WITH CHECK (email = auth.email());
+  WITH CHECK (
+    email = auth.email()
+    AND rol = 'user'
+  );
 
 DROP POLICY IF EXISTS "usuarios_update_own" ON usuarios;
 CREATE POLICY "usuarios_update_own"
@@ -143,7 +146,8 @@ CREATE POLICY "inscripciones_insert_own"
 GRANT SELECT ON TABLE ligas TO anon, authenticated;
 GRANT INSERT, UPDATE, DELETE ON TABLE ligas TO authenticated;
 GRANT SELECT ON TABLE usuarios TO anon, authenticated;
-GRANT SELECT, INSERT, UPDATE ON TABLE usuarios TO authenticated;
+GRANT INSERT ON TABLE usuarios TO authenticated;
+GRANT UPDATE (nombre, bio, foto_url) ON TABLE usuarios TO authenticated;
 GRANT SELECT, INSERT ON TABLE inscripciones TO authenticated;
 GRANT USAGE ON SCHEMA public TO anon, authenticated;
 GRANT USAGE, SELECT ON SEQUENCE ligas_id_seq TO anon, authenticated;
@@ -400,7 +404,7 @@ GRANT SELECT, INSERT, UPDATE ON TABLE mensajes TO authenticated;
 GRANT USAGE, SELECT ON SEQUENCE mensajes_id_seq TO authenticated;
 
 -- Para gestionar el calendario, marcá un usuario como admin:
--- UPDATE usuarios SET rol = 'admin' WHERE email = 'tu@email.com';
+-- UPDATE usuarios SET rol = 'admin' WHERE email = 'mfrazzoni@gmail.com';
 
 INSERT INTO ligas (nombre, club, categoria, fecha_inicio, fecha_fin)
 SELECT * FROM (

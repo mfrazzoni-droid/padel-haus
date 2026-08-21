@@ -47,4 +47,4 @@ GRANT SELECT ON TABLE usuarios TO anon, authenticated;
 GRANT USAGE, SELECT ON SEQUENCE partidos_id_seq TO authenticated;
 
 -- Marcá tu usuario como administradora:
--- UPDATE usuarios SET rol = 'admin' WHERE email = 'tu@email.com';
+-- UPDATE usuarios SET rol = 'admin' WHERE email = 'mfrazzoni@gmail.com';
